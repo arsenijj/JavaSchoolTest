@@ -123,9 +123,10 @@ public class Where {
 
                     String value1 = row.get(arg1arg2[0].replaceAll("\\s+", "")) == null ? "null"
                             : row.get(arg1arg2[0].replaceAll("\\s+", "")).toString();
+
                     String value2 = arg1arg2[1];
                     Double val;
-                    if (value1.equals("null")) {
+                    if (value1.equals("null") || value2.equals("null")) {
                         if (!(operator.equals("=") && (value2.equals("null") || value2.equals("0")))) {
                             throw new NullPointerException("Arguement error");
                         }
@@ -138,7 +139,6 @@ public class Where {
                         }
                         result = logicNumber(val, arg1arg2[1], operator);
                     }
-
 
                 } else {
                     if (j.contains("active")) {
@@ -157,10 +157,12 @@ public class Where {
                                 throw new NullPointerException("Operator error");
                             }
                         }
+                        System.out.println(Arrays.toString(arg1arg2));
                         String value1 = row.get(arg1arg2[0].replaceAll("\\s+", "")) == null ? "null"
                                 : row.get(arg1arg2[0].replaceAll("\\s+", "")).toString();
                         String value2 = arg1arg2[1];
                         Boolean val;
+
                         if (value1.equals("null")) {
                             if (!(operator.equals("=") && (value2.equals("null") || value2.equals("0")))) {
                                 throw new NullPointerException("Arguement error");
@@ -172,25 +174,70 @@ public class Where {
                                     throw new NullPointerException("Arguement error");
                                 }
                             }
-                            if (operator.equals("=")){
+                            if (operator.equals("=")) {
                                 result = val == Boolean.parseBoolean(arg1arg2[1]);
-                            }
-                            else{
+                            } else {
                                 result = val != Boolean.parseBoolean(arg1arg2[1]);
                             }
                         }
+                    } else {
+                        if (j.contains("lastName")) {
+                            String[] arg1arg2;
+                            String operator;
+                            if (j.contains("!=")) {
+                                j = j.replace("!=", " ");
+                                operator = "!=";
+                                arg1arg2 = j.split("\\s+");
+                            } else {
+                                if (j.contains("=")) {
+                                    j = j.replace("=", " ");
+                                    operator = "=";
+                                    arg1arg2 = j.split("\\s+");
+                                } else {
+                                    if (j.contains("ilike")) {
+                                        j = j.replace("ilike", " ");
+                                        operator = "ilike";
+                                        arg1arg2 = j.split("\\s+");
+                                    } else {
+                                        if (j.contains("like")) {
+                                            j = j.replace("!=", " ");
+                                            operator = "like";
+                                            arg1arg2 = j.split("\\s+");
+                                        } else {
+                                            return false;
+                                        }
+                                    }
+                                }
+                            }
+                            String value1 = row.get(arg1arg2[0].replaceAll("\\s+", "")) == null ? "null"
+                                    : row.get(arg1arg2[0].replaceAll("\\s+", "")).toString();
+                 
+                            String value2 = arg1arg2[1];
+              
+
+                            if (value1.equals("null")) {
+                                if (!(operator.equals("=") && (value2.equals("null") || value2.equals("0")))) {
+                                    throw new NullPointerException("Arguement error");
+                                }
+                            } else {
+
+                                if (value2.equals("null")) {
+                                    if (!(operator.equals("=") && (value1.equals("null") || value1.equals("0")))) {
+                                        throw new NullPointerException("Arguement error");
+                                    }
+                                }
+                                result = logicString(value1, arg1arg2[1], operator);
+                            }
+
+                        }
                     }
                 }
-                // sep_by_and[counter] = i.split("and");
-                // counter++;
-            }
-            System.out.println(result);
-            if (result) {
-                return true;
+                if (result) {
+                    System.out.println(result);
+                    return true;
+                }
             }
         }
-        
         return false;
     }
-
 }

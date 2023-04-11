@@ -54,7 +54,8 @@ public class JavaSchoolStarter {
         if (res.contains("select")) {
 
           String[] args = request.split(",");
-          args[0] = args[0].split("\\s+")[1].replaceAll("\\s+", "");
+          args[0] = args[0].split("\\s+")[1].replaceAll("\\s+",
+                                                              "");
           for (String arg : args) {
             arg = arg.replaceAll("\\s+", "");
             if (!parser.isValidArg(arg)) {
@@ -64,7 +65,8 @@ public class JavaSchoolStarter {
           for (int i = 0; i < Main.table.size(); i++) {
             Map<String, Object> st = Main.table.get(i);
             for (String arg : args) {
-              System.out.print(st.get(arg.replaceAll("\\s+", "")) + " ");
+              System.out.print(st.get(arg.replaceAll("\\s+",
+                                                     "")) + " ");
             }
             System.out.println();
           }
