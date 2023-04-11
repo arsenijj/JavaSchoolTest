@@ -9,17 +9,18 @@ import java.util.List;
 import java.util.Map;
 
 public class Parse {
+   
 
     public static boolean containsIgnoreCase(String str1, String str2) {
         final int length = str2.length();
         if (length == 0)
-            return true; 
+            return true;
 
         final char firstLo = Character.toLowerCase(str2.charAt(0));
         final char firstUp = Character.toUpperCase(str2.charAt(0));
 
         for (int i = str1.length() - length; i >= 0; i--) {
-            
+
             final char ch = str1.charAt(i);
             if (ch != firstLo && ch != firstUp)
                 continue;
@@ -29,6 +30,12 @@ public class Parse {
         }
 
         return false;
+    }
+
+    public Boolean isValidArg(String arg) {
+        return arg.equals("age") || arg.equals("cost") 
+                || arg.equals("lastName") || arg.equals("id")
+                || arg.equals("active");
     }
 
     public String parse(String request) {
@@ -54,31 +61,28 @@ public class Parse {
             }
         }
 
-
     }
-
 
 }
 
-            // String left = "";
-            // String right = "";
-            // Boolean flag = false;
-            // Integer and = 0;
+// String left = "";
+// String right = "";
+// Boolean flag = false;
+// Integer and = 0;
 
-            // for (String i : reqSep) {
-            // if (!i.toLowerCase().equals("where") && !flag) {
-            // left += i.replace(",", "") + " ";
-            // } else {
-            // flag = true;
-            // }
-            // if (!i.toLowerCase().equals("where") && flag) {
-            // right += i.replace(",", "") + " ";
-            // if (i.toLowerCase().equals("and")) {
-            // and += 1;
-            // }
-            // }
-            // }
-            // System.out.println(right + and);
-            // Where i = new Where();
-            // i.logic(right, and);
-
+// for (String i : reqSep) {
+// if (!i.toLowerCase().equals("where") && !flag) {
+// left += i.replace(",", "") + " ";
+// } else {
+// flag = true;
+// }
+// if (!i.toLowerCase().equals("where") && flag) {
+// right += i.replace(",", "") + " ";
+// if (i.toLowerCase().equals("and")) {
+// and += 1;
+// }
+// }
+// }
+// System.out.println(right + and);
+// Where i = new Where();
+// i.logic(right, and);

@@ -37,8 +37,8 @@ public class Insert {
                             break;
                         case "'id'", "id":
                             try {
-                                row.put("id", 
-                                        Integer.parseInt(query[i + 2]));
+                                row.put("id",
+                                        Long.parseLong(query[i + 2]));
 
                             } catch (Exception e) {
                                 System.out.println("Value error in id.");
@@ -47,7 +47,7 @@ public class Insert {
                         case "'active'", "active":
                             try {
 
-                                row.put("active", 
+                                row.put("active",
                                         Boolean.parseBoolean(query[i + 2]));
                             } catch (Exception e) {
                                 System.out.println("Value error in active.");
@@ -56,8 +56,8 @@ public class Insert {
                         case "'age'", "age":
                             try {
 
-                                row.put("age", 
-                                        Integer.parseInt(query[i + 2]));
+                                row.put("age",
+                                        Long.parseLong(query[i + 2]));
                             } catch (Exception e) {
                                 System.out.println("Value error in age.");
                             }
@@ -65,7 +65,7 @@ public class Insert {
                         case "'cost'", "cost":
                             try {
 
-                                row.put("cost", 
+                                row.put("cost",
                                         Double.parseDouble(query[i + 2]));
                             } catch (Exception e) {
 

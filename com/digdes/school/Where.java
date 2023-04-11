@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import javax.lang.model.type.NullType;
 import javax.swing.plaf.synth.SynthDesktopPaneUI;
 
 public class Where {
@@ -51,67 +52,67 @@ public class Where {
         return false;
     }
 
-    private Boolean logicNumber(Object a, Double b, String operator) {
-
+    private Boolean logicNumber(Double a, String b, String operator) {
+        // if (b.equals("null") && )
         switch (operator) {
 
             case ">=":
-                return Double.parseDouble(a.toString()) >= b;
+                return a >= Double.parseDouble(b);
             case "=":
-                return Double.parseDouble(a.toString()) == b;
+                return a == Double.parseDouble(b);
             case "<=":
-                return Double.parseDouble(a.toString()) <= b;
+                return a <= Double.parseDouble(b);
             case ">":
-                return Double.parseDouble(a.toString()) > b;
+                return a > Double.parseDouble(b);
             case "<":
-                return Double.parseDouble(a.toString()) < b;
+                return a < Double.parseDouble(b);
         }
         return false;
     }
 
     public Boolean logic(String right, Integer and, Map<String, Object> row) {
-        
-        System.out.println(row);
+
         String[] sep_by_logic = right.split("or");
         String[][] sep_by_and = new String[and][];
         Integer counter = 0;
+        // System.out.println(right);
+        Boolean result = true;
 
         for (String i : right.split("or")) {
-            sep_by_and[counter] = i.split("and");
-            counter++;
-            System.out.println(sep_by_and[counter - 1]);
-        }
-        for (int i = 0; i < sep_by_and.length;i++) {
-            for (int j = 0; j < sep_by_and[i].length; j++) {
-                System.out.println(sep_by_and[i][j]);
-                if (sep_by_and[i][j].contains("id") || sep_by_and[i][j].contains("age")
-                        || sep_by_and[i][j].contains("cost")) {
+            for (String j : i.split("and")) {
+                j = j.trim();
+                if (j.contains("id") || j.contains("age")
+                        || j.contains("cost")) {
+
                     String[] arg1arg2;
                     String operator;
-                    if (sep_by_and[i][j].contains("<=")) {
-                        sep_by_and[i][j].replace("<=", " ");
+
+                    if (j.contains("<=")) {
+                        j = j.replace("<=", " ");
                         operator = "<=";
-                        arg1arg2 = sep_by_and[i][j].split("\\s+");
+                        arg1arg2 = j.split("\\s+");
                     } else {
-                        if (sep_by_and[i][j].contains(">=")) {
-                            sep_by_and[i][j].replace(">=", " ");
+
+                        if (j.contains(">=")) {
+                            j = j.replace(">=", " ");
                             operator = ">=";
-                            arg1arg2 = sep_by_and[i][j].split("\\s+");
+                            arg1arg2 = j.split("\\s+");
                         } else {
-                            if (sep_by_and[i][j].contains("<")) {
-                                sep_by_and[i][j].replace("<", " ");
+                            if (j.contains("<")) {
+                                j = j.replace("<", " ");
                                 operator = "<";
-                                arg1arg2 = sep_by_and[i][j].split("\\s+");
+                                arg1arg2 = j.split("\\s+");
+
                             } else {
-                                if (sep_by_and[i][j].contains(">")) {
-                                    sep_by_and[i][j].replace(">", " ");
+                                if (j.contains(">")) {
+                                    j = j.replace(">", " ");
                                     operator = ">";
-                                    arg1arg2 = sep_by_and[i][j].split("\\s+");
+                                    arg1arg2 = j.split("\\s+");
                                 } else {
-                                    if (sep_by_and[i][j].contains("=")) {
-                                        sep_by_and[i][j].replace("=", " ");
+                                    if (j.contains("=")) {
+                                        j = j.replace("=", " ");
                                         operator = "=";
-                                        arg1arg2 = sep_by_and[i][j].split("\\s+");
+                                        arg1arg2 = j.split("\\s+");
                                     } else {
                                         return false;
                                     }
@@ -119,22 +120,77 @@ public class Where {
                             }
                         }
                     }
-                    String arguement = "'" + arg1arg2[0] +"'";
-                    System.out.println(row.get(arguement));
-                    if (!logicNumber(row.get(arguement), Double.parseDouble(arg1arg2[1]), operator)){
-                        return false;
+
+                    String value1 = row.get(arg1arg2[0].replaceAll("\\s+", "")) == null ? "null"
+                            : row.get(arg1arg2[0].replaceAll("\\s+", "")).toString();
+                    String value2 = arg1arg2[1];
+                    Double val;
+                    if (value1.equals("null")) {
+                        if (!(operator.equals("=") && (value2.equals("null") || value2.equals("0")))) {
+                            throw new NullPointerException("Arguement error");
+                        }
+                    } else {
+                        val = Double.parseDouble(value1);
+                        if (value2.equals("null")) {
+                            if (!(val == 0 && operator.equals("="))) {
+                                throw new NullPointerException("Arguement error");
+                            }
+                        }
+                        result = logicNumber(val, arg1arg2[1], operator);
+                    }
+
+
+                } else {
+                    if (j.contains("active")) {
+                        String[] arg1arg2;
+                        String operator;
+                        if (j.contains("!=")) {
+                            j = j.replace("!=", " ");
+                            operator = "!=";
+                            arg1arg2 = j.split("\\s+");
+                        } else {
+                            if (j.contains("=")) {
+                                j = j.replace("=", " ");
+                                operator = "=";
+                                arg1arg2 = j.split("\\s+");
+                            } else {
+                                throw new NullPointerException("Operator error");
+                            }
+                        }
+                        String value1 = row.get(arg1arg2[0].replaceAll("\\s+", "")) == null ? "null"
+                                : row.get(arg1arg2[0].replaceAll("\\s+", "")).toString();
+                        String value2 = arg1arg2[1];
+                        Boolean val;
+                        if (value1.equals("null")) {
+                            if (!(operator.equals("=") && (value2.equals("null") || value2.equals("0")))) {
+                                throw new NullPointerException("Arguement error");
+                            }
+                        } else {
+                            val = Boolean.parseBoolean(value1);
+                            if (value2.equals("null")) {
+                                if (!(val && operator.equals("="))) {
+                                    throw new NullPointerException("Arguement error");
+                                }
+                            }
+                            if (operator.equals("=")){
+                                result = val == Boolean.parseBoolean(arg1arg2[1]);
+                            }
+                            else{
+                                result = val != Boolean.parseBoolean(arg1arg2[1]);
+                            }
+                        }
                     }
                 }
-
+                // sep_by_and[counter] = i.split("and");
+                // counter++;
             }
-            return true;
-            // System.out.println("newRow))");
+            System.out.println(result);
+            if (result) {
+                return true;
+            }
         }
-        for (int i = 0; i < sep_by_and.length; i++) {
-            String[] bol = sep_by_and[i];
-            System.out.println();
-        }
-
-        return true;
+        
+        return false;
     }
+
 }
