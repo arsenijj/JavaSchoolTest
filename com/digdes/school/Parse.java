@@ -32,7 +32,7 @@ public class Parse {
         return false;
     }
 
-    public Boolean isValidArg(String arg) {
+    public static Boolean isValidArg(String arg) {
         return arg.equals("age") || arg.equals("cost") 
                 || arg.equals("lastName") || arg.equals("id")
                 || arg.equals("active");
@@ -53,7 +53,7 @@ public class Parse {
                     return "delete" + flag;
                 } else {
                     if (reqSep[0].toLowerCase().equals("update") && !containsIgnoreCase(request, "where")) {
-                        return "delete";
+                        return "update";
                     } else {
                         return "error";
                     }
@@ -64,25 +64,3 @@ public class Parse {
     }
 
 }
-
-// String left = "";
-// String right = "";
-// Boolean flag = false;
-// Integer and = 0;
-
-// for (String i : reqSep) {
-// if (!i.toLowerCase().equals("where") && !flag) {
-// left += i.replace(",", "") + " ";
-// } else {
-// flag = true;
-// }
-// if (!i.toLowerCase().equals("where") && flag) {
-// right += i.replace(",", "") + " ";
-// if (i.toLowerCase().equals("and")) {
-// and += 1;
-// }
-// }
-// }
-// System.out.println(right + and);
-// Where i = new Where();
-// i.logic(right, and);

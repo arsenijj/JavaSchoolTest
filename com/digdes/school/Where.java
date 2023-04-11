@@ -7,9 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import javax.lang.model.type.NullType;
-import javax.swing.plaf.synth.SynthDesktopPaneUI;
-
 public class Where {
 
     private Boolean logicString(String str1, String str2, String operator) {
@@ -18,35 +15,37 @@ public class Where {
             case "like", "ilike":
                 if (str2.startsWith("%") && str2.endsWith("%")) {
                     if (operator.equals("like")) {
-                        return str1.contains(str2);
+                        return str1.contains(str2.replace("%", "")) && str1.lastIndexOf(str2.replace("%", "")) != 0;
                     } else {
-                        return str1.toLowerCase().contains(str2.toLowerCase());
+                        return str1.toLowerCase().contains(str2.toLowerCase().replace("%", ""))
+                                && str1.toLowerCase().lastIndexOf(str2.toLowerCase().replace("%", "")) != 0;
                     }
                 } else {
                     if (str2.startsWith("%")) {
                         if (operator.equals("like")) {
-                            return str1.endsWith(str2);
+                            return str1.endsWith(str2.replace("%", ""));
                         } else {
-                            return str1.toLowerCase().endsWith(str2.toLowerCase());
+                            return str1.toLowerCase().endsWith(str2.toLowerCase().replace("%", ""));
                         }
                     } else {
                         if (str2.endsWith("%")) {
+
                             if (operator.equals("like")) {
-                                return str1.startsWith(str2);
+                                return str1.startsWith(str2.replace("%", ""));
                             } else {
-                                return str1.toLowerCase().startsWith(str2.toLowerCase());
+                                return str1.toLowerCase().startsWith(str2.toLowerCase().replace("%", ""));
                             }
                         } else {
-                            return str1.equals(str2);
+                            return str1.equals(str2.replace("%", ""));
                         }
                     }
                 }
 
             case "=":
-                return str1.equals(str2);
+                return str1.equals(str2.replace("%", ""));
 
             case "!=":
-                return !str1.equals(str2);
+                return !str1.equals(str2.replace("%", ""));
 
         }
         return false;
@@ -75,7 +74,6 @@ public class Where {
         String[] sep_by_logic = right.split("or");
         String[][] sep_by_and = new String[and][];
         Integer counter = 0;
-        // System.out.println(right);
         Boolean result = true;
 
         for (String i : right.split("or")) {
@@ -211,9 +209,8 @@ public class Where {
                             }
                             String value1 = row.get(arg1arg2[0].replaceAll("\\s+", "")) == null ? "null"
                                     : row.get(arg1arg2[0].replaceAll("\\s+", "")).toString();
-                 
+
                             String value2 = arg1arg2[1];
-              
 
                             if (value1.equals("null")) {
                                 if (!(operator.equals("=") && (value2.equals("null") || value2.equals("0")))) {
@@ -226,18 +223,21 @@ public class Where {
                                         throw new NullPointerException("Arguement error");
                                     }
                                 }
-                                result = logicString(value1, arg1arg2[1], operator);
+                                result = logicString(value1.replace("'", ""), arg1arg2[1].replace("'", ""), operator);
                             }
 
                         }
                     }
                 }
-                if (result) {
-                    System.out.println(result);
-                    return true;
+                if (!result) {
+                    break;
                 }
             }
+            if (result) {
+                return true;
+            }
         }
+
         return false;
     }
 }
