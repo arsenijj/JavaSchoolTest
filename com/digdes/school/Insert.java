@@ -1,20 +1,24 @@
 package com.digdes.school;
-
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+
 public class Insert {
 
-    public Map<String, Object> insert(String[] query) {
+    public Insert() {
+
+    }
+
+    public Map<String, Object> insert(String[] query) throws Exception{
 
         String left = "";
 
         for (int i = 2; i < query.length; i++) {
             left += query[i].replace(",",
-                                     "").replace(";",
-                                                             "") +
-                                                             " ";
+                    "").replace(";",
+                            "")
+                    +
+                    " ";
         }
 
         query = left.split("\\s+");
@@ -28,8 +32,8 @@ public class Insert {
         row.put("active", null);
 
         if (query.length < 3 || query.length % 3 != 0 || query.length > 15) {
-            System.out.println("Too few arguements");
-            return row;
+            throw new NullPointerException("Too few arguements");
+
         } else {
             for (int i = 0; i < query.length - 2; i += 3) {
                 if (query[i + 1].equals("=")) {
@@ -71,7 +75,7 @@ public class Insert {
                                 row.put("cost",
                                         Double.parseDouble(query[i + 2]));
                             } catch (Exception e) {
-
+                                System.out.println("Value error in cost.");
                             }
                             break;
                     }

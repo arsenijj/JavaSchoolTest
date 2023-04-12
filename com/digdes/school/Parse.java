@@ -1,17 +1,13 @@
 package com.digdes.school;
 
-// import java.lang.reflect.Array;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 public class Parse {
-   
 
-    public static boolean containsIgnoreCase(String str1, String str2) {
+    public Parse() {
+
+    }
+
+    public static boolean containsIgnoreCase(String str1, String str2){
         final int length = str2.length();
         if (length == 0)
             return true;
@@ -33,34 +29,35 @@ public class Parse {
     }
 
     public static Boolean isValidArg(String arg) {
-        return arg.equals("age") || arg.equals("cost") 
+        return arg.equals("age") || arg.equals("cost")
                 || arg.equals("lastName") || arg.equals("id")
                 || arg.equals("active");
     }
 
-    public String parse(String request) {
+    public String parse(String request) throws Exception{
 
         String[] reqSep = (request.split("\\s+"));
         String flag = containsIgnoreCase(request, "where") ? " where" : "";
 
-        if (reqSep[0].toLowerCase().equals("insert") && reqSep[1].toLowerCase().equals("values")) {
+        if (reqSep[0].toLowerCase().equals("insert") && reqSep[1].toLowerCase().equals("values")
+                && !containsIgnoreCase(request, "where")) {
             return "insert";
-        } else {
+        } else if (!containsIgnoreCase(request, "values")) {
+
             if (reqSep[0].toLowerCase().equals("select")) {
                 return "select" + flag;
             } else {
                 if (reqSep[0].toLowerCase().equals("delete")) {
                     return "delete" + flag;
+                } else if (reqSep[0].toLowerCase().equals("update")) {
+                    return "update" + flag;
                 } else {
-                    if (reqSep[0].toLowerCase().equals("update") && !containsIgnoreCase(request, "where")) {
-                        return "update";
-                    } else {
-                        return "error";
-                    }
+                    throw new NullPointerException("Error in the query: " + request);
                 }
             }
+        } else {
+            throw new NullPointerException("Error in the query: " + request + "VALUES could't be used.");
         }
-
     }
 
 }

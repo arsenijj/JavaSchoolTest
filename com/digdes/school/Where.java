@@ -1,13 +1,12 @@
 package com.digdes.school;
-
-import java.util.Arrays;
-import java.util.HashMap;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
+
 public class Where {
+    
+    public Where() {
+
+    }
 
     private Boolean logicString(String str1, String str2, String operator) {
 
@@ -63,23 +62,24 @@ public class Where {
     private Boolean logicNumber(Double a, String b, String operator) {
         // if (b.equals("null") && )
         switch (operator) {
-
             case ">=":
                 return a >= Double.parseDouble(b);
-            case "=":
-                return a == Double.parseDouble(b);
             case "<=":
                 return a <= Double.parseDouble(b);
+            case "!=":
+    
+                return a != Double.parseDouble(b);
+            case "=":
+                return a == Double.parseDouble(b);
             case ">":
                 return a > Double.parseDouble(b);
             case "<":
-                System.out.println("ava");
                 return a < Double.parseDouble(b);
         }
-        return false;
+        throw new NullPointerException("Operator error");
     }
 
-    public Boolean logic(String right, Integer and, Map<String, Object> row) {
+    public Boolean logic(String right, Integer and, Map<String, Object> row) throws Exception{
 
         String[] sep_by_logic = right.split("or");
         String[][] sep_by_and = new String[and][];
@@ -111,15 +111,21 @@ public class Where {
                         j = j.replace(">", " ");
                         operator = ">";
                         arg1arg2 = j.split("\\s+");
+                    } else if (j.contains("!=")) {
+                        
+                        j = j.replace("!=", " ");
+                        operator = "!=";
+                        arg1arg2 = j.split("\\s+");
                     } else if (j.contains("=")) {
-
+                        
                         j = j.replace("=", " ");
                         operator = "=";
-                        arg1arg2 = j.split("=");
-                    } else {
-                        return false;
+                        arg1arg2 = j.split("\\s+");
                     }
-
+                        else {
+                        throw new NullPointerException("Operator error");
+                    }
+    
                     if (arg1arg2.length != 2) {
                         throw new NullPointerException("Arguement amount error");
                     }
@@ -180,7 +186,8 @@ public class Where {
                                 throw new NullPointerException("Arguement error");
                             }
                         } else {
-                            val = Boolean.parseBoolean(value1);
+                            val = Boolean.parseBoolean(row.get(arg1arg2[0].replaceAll("\\s+",
+                            "")).toString());
                             if (value2.equals("null")) {
                                 if (!(val && operator.equals("="))) {
                                     throw new NullPointerException("Arguement error");
