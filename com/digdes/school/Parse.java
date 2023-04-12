@@ -39,10 +39,10 @@ public class Parse {
         String[] reqSep = (request.split("\\s+"));
         String flag = containsIgnoreCase(request, "where") ? " where" : "";
 
-        if (reqSep[0].toLowerCase().equals("insert") && reqSep[1].toLowerCase().equals("values")
+        if (reqSep[0].toLowerCase().equals("insert") && containsIgnoreCase(request, "values")
                 && !containsIgnoreCase(request, "where")) {
             return "insert";
-        } else if (!containsIgnoreCase(request, "values")) {
+        } else if (!(containsIgnoreCase(request, "values") || containsIgnoreCase(request, "insert"))) {
 
             if (reqSep[0].toLowerCase().equals("select")) {
                 return "select" + flag;
@@ -56,7 +56,7 @@ public class Parse {
                 }
             }
         } else {
-            throw new NullPointerException("Error in the query: " + request + "VALUES could't be used.");
+            throw new NullPointerException("Error in the query: " + request);
         }
     }
 
