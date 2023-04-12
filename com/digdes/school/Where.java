@@ -73,6 +73,7 @@ public class Where {
             case ">":
                 return a > Double.parseDouble(b);
             case "<":
+                System.out.println("ava");
                 return a < Double.parseDouble(b);
         }
         return false;
@@ -87,9 +88,9 @@ public class Where {
         for (String i : right.split("or")) {
             for (String j : i.split("and")) {
                 j = j.trim();
+
                 if (j.contains("id") || j.contains("age")
                         || j.contains("cost")) {
-
                     String[] arg1arg2;
                     String operator;
 
@@ -111,9 +112,10 @@ public class Where {
                         operator = ">";
                         arg1arg2 = j.split("\\s+");
                     } else if (j.contains("=")) {
+
                         j = j.replace("=", " ");
                         operator = "=";
-                        arg1arg2 = j.split("\\s+");
+                        arg1arg2 = j.split("=");
                     } else {
                         return false;
                     }
@@ -134,15 +136,16 @@ public class Where {
                                         || value2.equals("0")))) {
                             throw new NullPointerException("Arguement error");
                         }
-                    } else {
-                        val = Double.parseDouble(value1);
-                        if (value2.equals("null")) {
-                            if (!(val == 0 && operator.equals("="))) {
-                                throw new NullPointerException("Arguement error");
-                            }
-                        }
-                        result = logicNumber(val, arg1arg2[1], operator);
                     }
+                    val = Double.parseDouble(row.get(arg1arg2[0].replaceAll("\\s+",
+                            "")).toString());
+
+                    if (value2.equals("null")) {
+                        if (!(val == 0 && operator.equals("="))) {
+                            throw new NullPointerException("Arguement error");
+                        }
+                    }
+                    result = logicNumber(val, arg1arg2[1], operator);
 
                 } else {
                     if (j.contains("active")) {
@@ -160,7 +163,9 @@ public class Where {
                             throw new NullPointerException("Operator error");
 
                         }
-
+                        if (arg1arg2.length != 2) {
+                            throw new NullPointerException("Arguement amount error");
+                        }
                         String value1 = row.get(arg1arg2[0].replaceAll("\\s+",
                                 "")) == null ? "null"
                                         : row.get(arg1arg2[0].replaceAll("\\s+",
@@ -213,7 +218,9 @@ public class Where {
                                 }
 
                             }
-
+                            if (arg1arg2.length != 2) {
+                                throw new NullPointerException("Arguement amount error");
+                            }
                             String value1 = row.get(arg1arg2[0].replaceAll("\\s+",
                                     "")) == null ? "null"
                                             : row.get(arg1arg2[0].replaceAll("\\s+",
@@ -248,7 +255,6 @@ public class Where {
                 }
             }
             if (result) {
-                System.out.println("УСПЕХ");
                 return true;
             }
         }

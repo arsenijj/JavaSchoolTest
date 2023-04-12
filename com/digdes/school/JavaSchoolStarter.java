@@ -55,28 +55,10 @@ public class JavaSchoolStarter {
             new_table.add(row);
           }
         }
-        // Main.table = new_table;
-
-        // if (res.contains("select")) {
-        // String[] args = left.split("\\s+");
-        // System.out.println(Arrays.toString(args));
-        // for (int i = 0; i < new_table.size(); i++) {
-        // Map<String, Object> current_row = new_table.get(i);
-        // for (int j = 1; j < args.length; j++) {
-        // if (!Parse.isValidArg(args[j])) {
-        // throw new NullPointerException("Arguement name:" + args[j]);
-        // } else {
-        // System.out.print(current_row.get(args[j]) + " ");
-        // }
-        // }
-        // System.out.println();
-        // }
-
-        // }
       }
 
       if (res.contains("select")) {
-
+        List<Map<String, Object>> selected_rows = new ArrayList<>();
         String[] args = left.split("\\s+");
 
         if (new_table.size() == 0) {
@@ -84,24 +66,24 @@ public class JavaSchoolStarter {
         } else if (args.length == 1) {
           return Main.table;
         } else {
-          new_table.clear();
-          for (int i = 0; i < Main.table.size(); i++) {
+          
+          for (int i = 0; i < new_table.size(); i++) {
 
-            Map<String, Object> current_row = Main.table.get(i);
+            Map<String, Object> current_row = new_table.get(i);
 
             Map<String, Object> row = new HashMap<>();
             for (int j = 1; j < args.length; j++) {
 
               if (!Parse.isValidArg(args[j])) {
-                throw new NullPointerException("Arguement name:" + args[j]);
+                throw new NullPointerException("Arguement name error:" + args[j]);
               } else {
                 row.put(args[j], current_row.get(args[j]));
               }
             }
-            new_table.add(row);
+            selected_rows.add(row);
           }
         }
-        return new_table;
+        return selected_rows;
       } else if (res.contains("update")) {
         String[] args = left.split("\\s+");
 

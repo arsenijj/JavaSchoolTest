@@ -24,7 +24,7 @@ public class Main {
         List<Map<String, Object>> r2 = a.execute("INSERT VALUES 'lastName' = 'Федоров2', 'id' = 2, 'age' = 42, 'active' = false, 'cost' = 3.2;");
         List<Map<String, Object>> r3 = a.execute("INSERT VALUES 'lastName' = 'Федоров3', 'id' = 3, 'age' = 43, 'active' = true, 'cost' = 3.3;");
         List<Map<String, Object>> r4 = a.execute("INSERT VALUES 'lastName' = 'Федоров4', 'id' = 4, 'age' = 44, 'active' = false, 'cost' = 3.4;");
-        List<Map<String, Object>> b = a.execute("select age, lastName, cost where age > 100");
+        List<Map<String, Object>> b = a.execute("select age, lastName, cost where active = 1");
         System.out.println("res" + b);
         List<Map<String, Object>> f = a.execute("select");
 
