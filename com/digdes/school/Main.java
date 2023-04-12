@@ -20,14 +20,18 @@ public class Main {
         // Insert i = new Insert();
         // Map<String, Object> b = test1.execute("insert VALUES 'lastName' = 'Никитин' , 'id' = 3, 'age' = 21, 'active' = false, 'cost' = 44.2020 or active = true");
 
-        String r1 = a.execute("INSERT VALUES 'lastName' = '1Федоров1', 'id' = 1, 'age' = 10, 'active' = true, 'cost' = 3.1;");
-        String r2 = a.execute("INSERT VALUES 'lastName' = 'Федоров2', 'id' = 2, 'age' = 42, 'active' = false, 'cost' = 3.2;");
-        String r3 = a.execute("INSERT VALUES 'lastName' = 'Федоров3', 'id' = 3, 'age' = 43, 'active' = true, 'cost' = 3.3;");
-        String r4 = a.execute("INSERT VALUES 'lastName' = 'Федоров4', 'id' = 4, 'age' = 44, 'active' = false, 'cost' = 3.4;");
-        // String b = a.execute("select age, lastName, cost where age >= 2 or cost < 4 or lastName like 'su4ka' and age < 100 or cost > 10 and cost < 1000 or active = false");
-        // String b = a.execute("select age, lastName, cost where lastName ilike 'Ф%' or cost > 10 and age < 1 or cost > 10 and cost < 1000");
-        String b = a.execute("update age = 10, lastName = 'suchka', cost = 3.4;");
-        String c = a.execute("delete;");
+        List<Map<String, Object>> r1 = a.execute("INSERT VALUES 'lastName' = '1Федоров1', 'id' = 1, 'age' = 10, 'active' = true, 'cost' = 3.1;");
+        List<Map<String, Object>> r2 = a.execute("INSERT VALUES 'lastName' = 'Федоров2', 'id' = 2, 'age' = 42, 'active' = false, 'cost' = 3.2;");
+        List<Map<String, Object>> r3 = a.execute("INSERT VALUES 'lastName' = 'Федоров3', 'id' = 3, 'age' = 43, 'active' = true, 'cost' = 3.3;");
+        List<Map<String, Object>> r4 = a.execute("INSERT VALUES 'lastName' = 'Федоров4', 'id' = 4, 'age' = 44, 'active' = false, 'cost' = 3.4;");
+        List<Map<String, Object>> b = a.execute("select age, lastName, cost where age > 100");
+        System.out.println("res" + b);
+        List<Map<String, Object>> f = a.execute("select");
+
+        // List<Map<String, Object>> b = a.execute("select age, lastName, cost where lastName ilike 'Ф%' or cost > 10 and age < 1 or cost > 10 and cost < 1000");
+        // String b = a.execute("update age = 10, lastName = 'suchka', cost = 3.4;");
+        System.out.println(table);
+        // String c = a.execute("delete;");
         // String b = a.execute("select age, lastName, cost");
         // System.out.println(b);
         // System.out.println(r1)

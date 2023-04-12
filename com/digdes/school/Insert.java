@@ -11,7 +11,10 @@ public class Insert {
         String left = "";
 
         for (int i = 2; i < query.length; i++) {
-            left += query[i].replace(",", "").replace(";", "") + " ";
+            left += query[i].replace(",",
+                                     "").replace(";",
+                                                             "") +
+                                                             " ";
         }
 
         query = left.split("\\s+");

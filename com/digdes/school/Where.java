@@ -15,34 +15,43 @@ public class Where {
             case "like", "ilike":
                 if (str2.startsWith("%") && str2.endsWith("%")) {
                     if (operator.equals("like")) {
-                        return str1.contains(str2.replace("%", "")) && str1.lastIndexOf(str2.replace("%", "")) != 0;
+                        return str1.contains(str2.replace("%", ""))
+                                && str1.lastIndexOf(str2.replace("%",
+                                        "")) != 0;
                     } else {
-                        return str1.toLowerCase().contains(str2.toLowerCase().replace("%", ""))
-                                && str1.toLowerCase().lastIndexOf(str2.toLowerCase().replace("%", "")) != 0;
+                        return str1.toLowerCase().contains(str2.toLowerCase().replace("%",
+                                ""))
+                                && str1.toLowerCase().lastIndexOf(str2.toLowerCase().replace("%",
+                                        "")) != 0;
                     }
                 } else {
                     if (str2.startsWith("%")) {
                         if (operator.equals("like")) {
-                            return str1.endsWith(str2.replace("%", ""));
+                            return str1.endsWith(str2.replace("%",
+                                    ""));
                         } else {
-                            return str1.toLowerCase().endsWith(str2.toLowerCase().replace("%", ""));
+                            return str1.toLowerCase().endsWith(str2.toLowerCase().replace("%",
+                                    ""));
+                        }
+                    } else if (str2.endsWith("%")) {
+
+                        if (operator.equals("like")) {
+                            return str1.startsWith(str2.replace("%",
+                                    ""));
+                        } else {
+                            return str1.toLowerCase().startsWith(str2.toLowerCase().replace("%",
+                                    ""));
                         }
                     } else {
-                        if (str2.endsWith("%")) {
-
-                            if (operator.equals("like")) {
-                                return str1.startsWith(str2.replace("%", ""));
-                            } else {
-                                return str1.toLowerCase().startsWith(str2.toLowerCase().replace("%", ""));
-                            }
-                        } else {
-                            return str1.equals(str2.replace("%", ""));
-                        }
+                        return str1.equals(str2.replace("%",
+                                ""));
                     }
+
                 }
 
             case "=":
-                return str1.equals(str2.replace("%", ""));
+                return str1.equals(str2.replace("%",
+                        ""));
 
             case "!=":
                 return !str1.equals(str2.replace("%", ""));
@@ -75,7 +84,6 @@ public class Where {
         String[][] sep_by_and = new String[and][];
         Integer counter = 0;
         Boolean result = true;
-
         for (String i : right.split("or")) {
             for (String j : i.split("and")) {
                 j = j.trim();
@@ -89,43 +97,41 @@ public class Where {
                         j = j.replace("<=", " ");
                         operator = "<=";
                         arg1arg2 = j.split("\\s+");
+                    } else if (j.contains(">=")) {
+                        j = j.replace(">=", " ");
+                        operator = ">=";
+                        arg1arg2 = j.split("\\s+");
+                    } else if (j.contains("<")) {
+                        j = j.replace("<", " ");
+                        operator = "<";
+                        arg1arg2 = j.split("\\s+");
+
+                    } else if (j.contains(">")) {
+                        j = j.replace(">", " ");
+                        operator = ">";
+                        arg1arg2 = j.split("\\s+");
+                    } else if (j.contains("=")) {
+                        j = j.replace("=", " ");
+                        operator = "=";
+                        arg1arg2 = j.split("\\s+");
                     } else {
-
-                        if (j.contains(">=")) {
-                            j = j.replace(">=", " ");
-                            operator = ">=";
-                            arg1arg2 = j.split("\\s+");
-                        } else {
-                            if (j.contains("<")) {
-                                j = j.replace("<", " ");
-                                operator = "<";
-                                arg1arg2 = j.split("\\s+");
-
-                            } else {
-                                if (j.contains(">")) {
-                                    j = j.replace(">", " ");
-                                    operator = ">";
-                                    arg1arg2 = j.split("\\s+");
-                                } else {
-                                    if (j.contains("=")) {
-                                        j = j.replace("=", " ");
-                                        operator = "=";
-                                        arg1arg2 = j.split("\\s+");
-                                    } else {
-                                        return false;
-                                    }
-                                }
-                            }
-                        }
+                        return false;
                     }
 
-                    String value1 = row.get(arg1arg2[0].replaceAll("\\s+", "")) == null ? "null"
-                            : row.get(arg1arg2[0].replaceAll("\\s+", "")).toString();
+                    if (arg1arg2.length != 2) {
+                        throw new NullPointerException("Arguement amount error");
+                    }
+                    String value1 = row.get(arg1arg2[0].replaceAll("\\s+",
+                            "")) == null ? "null"
+                                    : row.get(arg1arg2[0].replaceAll("\\s+",
+                                            "")).toString();
 
                     String value2 = arg1arg2[1];
                     Double val;
                     if (value1.equals("null") || value2.equals("null")) {
-                        if (!(operator.equals("=") && (value2.equals("null") || value2.equals("0")))) {
+                        if (!(operator.equals("=")
+                                && (value2.equals("null")
+                                        || value2.equals("0")))) {
                             throw new NullPointerException("Arguement error");
                         }
                     } else {
@@ -146,23 +152,26 @@ public class Where {
                             j = j.replace("!=", " ");
                             operator = "!=";
                             arg1arg2 = j.split("\\s+");
+                        } else if (j.contains("=")) {
+                            j = j.replace("=", " ");
+                            operator = "=";
+                            arg1arg2 = j.split("\\s+");
                         } else {
-                            if (j.contains("=")) {
-                                j = j.replace("=", " ");
-                                operator = "=";
-                                arg1arg2 = j.split("\\s+");
-                            } else {
-                                throw new NullPointerException("Operator error");
-                            }
+                            throw new NullPointerException("Operator error");
+
                         }
-                        System.out.println(Arrays.toString(arg1arg2));
-                        String value1 = row.get(arg1arg2[0].replaceAll("\\s+", "")) == null ? "null"
-                                : row.get(arg1arg2[0].replaceAll("\\s+", "")).toString();
+
+                        String value1 = row.get(arg1arg2[0].replaceAll("\\s+",
+                                "")) == null ? "null"
+                                        : row.get(arg1arg2[0].replaceAll("\\s+",
+                                                "")).toString();
                         String value2 = arg1arg2[1];
                         Boolean val;
 
                         if (value1.equals("null")) {
-                            if (!(operator.equals("=") && (value2.equals("null") || value2.equals("0")))) {
+                            if (!(operator.equals("=") &&
+                                    (value2.equals("null")
+                                            || value2.equals("0")))) {
                                 throw new NullPointerException("Arguement error");
                             }
                         } else {
@@ -186,45 +195,50 @@ public class Where {
                                 j = j.replace("!=", " ");
                                 operator = "!=";
                                 arg1arg2 = j.split("\\s+");
+                            } else if (j.contains("=")) {
+                                j = j.replace("=", " ");
+                                operator = "=";
+                                arg1arg2 = j.split("\\s+");
                             } else {
-                                if (j.contains("=")) {
-                                    j = j.replace("=", " ");
-                                    operator = "=";
+                                if (j.contains("ilike")) {
+                                    j = j.replace("ilike", " ");
+                                    operator = "ilike";
+                                    arg1arg2 = j.split("\\s+");
+                                } else if (j.contains("like")) {
+                                    j = j.replace("!=", " ");
+                                    operator = "like";
                                     arg1arg2 = j.split("\\s+");
                                 } else {
-                                    if (j.contains("ilike")) {
-                                        j = j.replace("ilike", " ");
-                                        operator = "ilike";
-                                        arg1arg2 = j.split("\\s+");
-                                    } else {
-                                        if (j.contains("like")) {
-                                            j = j.replace("!=", " ");
-                                            operator = "like";
-                                            arg1arg2 = j.split("\\s+");
-                                        } else {
-                                            return false;
-                                        }
-                                    }
+                                    return false;
                                 }
+
                             }
-                            String value1 = row.get(arg1arg2[0].replaceAll("\\s+", "")) == null ? "null"
-                                    : row.get(arg1arg2[0].replaceAll("\\s+", "")).toString();
+
+                            String value1 = row.get(arg1arg2[0].replaceAll("\\s+",
+                                    "")) == null ? "null"
+                                            : row.get(arg1arg2[0].replaceAll("\\s+",
+                                                    "")).toString();
 
                             String value2 = arg1arg2[1];
 
                             if (value1.equals("null")) {
-                                if (!(operator.equals("=") && (value2.equals("null") || value2.equals("0")))) {
+                                if (!(operator.equals("=") &&
+                                        (value2.equals("null")
+                                                || value2.equals("0")))) {
                                     throw new NullPointerException("Arguement error");
                                 }
-                            } else {
-
-                                if (value2.equals("null")) {
-                                    if (!(operator.equals("=") && (value1.equals("null") || value1.equals("0")))) {
-                                        throw new NullPointerException("Arguement error");
-                                    }
+                            } else if (value2.equals("null")) {
+                                if (!(operator.equals("=")
+                                        && (value1.equals("null")
+                                                || value1.equals("0")))) {
+                                    throw new NullPointerException("Arguement error");
                                 }
-                                result = logicString(value1.replace("'", ""), arg1arg2[1].replace("'", ""), operator);
                             }
+                            result = logicString(value1.replace("'",
+                                    ""),
+                                    arg1arg2[1].replace("'",
+                                            ""),
+                                    operator);
 
                         }
                     }
@@ -234,6 +248,7 @@ public class Where {
                 }
             }
             if (result) {
+                System.out.println("УСПЕХ");
                 return true;
             }
         }
